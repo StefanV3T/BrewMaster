@@ -1,0 +1,245 @@
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import './BlogDetail.css';
+import { Clock, Coffee } from 'lucide-react';
+
+type BlogPostMeta = {
+    title: string;
+    excerpt: string;
+    image: string;
+    author: string;
+    date: string;
+    category: string;
+    slug: string;
+};
+
+type RecipePostMeta = BlogPostMeta & {
+    ingredients?: string[];
+    time?: string;
+    difficulty?: string;
+};
+
+type BrewingMethodPostMeta = BlogPostMeta & {
+    description?: string; // Additional details related to brewing methods
+    duration?: string; // Duration of the brewing method
+};
+
+type BlogPost = BlogPostMeta & {
+    content: string;
+};
+
+const BlogDetail: React.FC = () => {
+    const location = useLocation();
+    const { slug } = useParams<{ slug: string }>();
+    const [post, setPost] = useState<BlogPost | null>(null);
+    const [recommendedPosts, setRecommendedPosts] = useState<BlogPostMeta[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        const loadPost = async () => {
+            setLoading(true);
+            setTimeout(async () => {
+                try {
+                    const { attributes, html } = await import(`../blogs/${slug}.md`) as { attributes: BlogPost, html: string };
+
+                    const postData = { ...attributes, content: html };
+                    setPost(postData);
+
+                    const markdownFiles = import.meta.glob('../blogs/*.md');
+                    const posts = await Promise.all(
+                        Object.entries(markdownFiles).map(async ([path, resolver]) => {
+                            const { attributes } = (await resolver()) as { attributes: BlogPost };
+                            return { ...attributes, slug: path.split('/').pop()?.replace('.md', '') || '' };
+                        })
+                    );
+                    setRecommendedPosts(posts.filter(p => p.slug !== slug)); // Exclude the current post
+                } catch (error) {
+                    console.error('Error loading the post:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }, 100)
+
+        };
+
+        if (slug) {
+            loadPost();
+        }
+    }, [slug, location]);
+
+    if (!post) return <p>Loading...</p>;
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+    };
+
+    const categorizedPosts = recommendedPosts.reduce((acc: { blog: BlogPostMeta[], recipe: RecipePostMeta[], brewingMethod: BrewingMethodPostMeta[] }, post) => {
+        if (post.category === 'recipe') {
+            acc.recipe.push(post as RecipePostMeta);
+        } else if (post.category === 'brewing method') {
+            acc.brewingMethod.push(post as BrewingMethodPostMeta);
+        } else {
+            acc.blog.push(post);
+        }
+        return acc;
+    }, { blog: [], recipe: [], brewingMethod: [] });
+
+    return (
+        <>
+
+            <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-8 bg-white">
+
+                {/* Blog Content */}
+                <div className="w-2/3" id="blog-content">
+                    {loading ? (
+                        <div className="flex justify-center items-center w-full pt-32">
+                            <div className="spinner"></div>
+                        </div>
+                    ) : (
+                        <div>
+                            <p className="py-5 text-sm text-coffee">
+                                <a href="/" className="text-coffee hover:text-coffee-dark">Home</a>
+                                <span className="mx-2">/</span>
+                                <a href="#" className="text-coffee hover:text-coffee-dark">{post.title}</a>
+                            </p>
+
+                            <h1 className="text-3xl font-bold text-gray-900 mb-4">{post.title}</h1>
+                            <p className="text-lg text-gray-600 mb-4">{post.author}</p>
+                            {post.date ? (
+                                <p className="text-sm text-gray-500 mb-8">{formatDate(post.date)}</p>
+                            ) : (
+                                <p></p>
+                            )
+                            }
+
+                            <div className="text-base text-gray-800 mb-16">
+                                <div dangerouslySetInnerHTML={{ __html: post.content }} className="markdownContent" />
+                            </div>
+
+                            <a href="#blog-content">
+                                <button className="btn btn-primary mr-5">Back to top</button>
+                            </a>
+                            <button className="btn">Back to home</button>
+
+                        </div>
+                    )}
+
+                    {/* Recommended Posts in horizontal layout */}
+                    <div className="flex space-x-8 mt-16">
+                        {categorizedPosts.blog.map((recommended) => (
+                            <div key={recommended.slug} className="w-1/3">
+                                <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
+                                <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
+                                    {recommended.title}
+                                </Link>
+                                <p className="text-sm text-gray-600 mt-2">{recommended.excerpt}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Recipe Posts */}
+                    <div className="flex space-x-8 mt-16">
+                        {categorizedPosts.recipe.map((recommended) => (
+                            <div key={recommended.slug} className="w-1/3 border p-4 rounded-lg shadow-lg">
+                                <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
+                                <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
+                                    {recommended.title}
+                                </Link>
+                                <div className="mt-2 text-sm text-gray-600">
+                                    <p>{recommended.excerpt}</p>
+                                    <ul className="mt-2">
+                                        {recommended.ingredients && recommended.ingredients.length > 0 && (
+                                            <>
+                                                <li><strong>Ingredients:</strong></li>
+                                                {recommended.ingredients.map((ingredient, index) => (
+                                                    <li key={index}>- {ingredient}</li>
+                                                ))}
+                                            </>
+                                        )}
+                                        {recommended.time && <li><strong>Time:</strong> {recommended.time}</li>}
+                                        {recommended.difficulty && <li><strong>Difficulty:</strong> {recommended.difficulty}</li>}
+                                    </ul>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Brewing Method Posts */}
+                    <div className="flex space-x-8 mt-16">
+                        {categorizedPosts.brewingMethod.map((recommended) => (
+                            <div key={recommended.slug} className="w-1/3 border p-4 rounded-lg shadow-lg">
+                                <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
+                                <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
+                                    {recommended.title}
+                                </Link>
+                                <div className="mt-2 text-sm text-gray-600">
+                                    <p>{recommended.excerpt}</p>
+                                    {recommended.description && (
+                                        <p className="mt-2"><strong>Description:</strong> {recommended.description}</p>
+                                    )}
+                                    {recommended.duration && (
+                                        <p className="mt-2"><strong>Duration:</strong> {recommended.duration}</p>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Sidebar */}
+                <div className="w-1/3 bg-gray-50 p-6 rounded-lg shadow-lg border-l-2 sidebar">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Recommended blogs</h3>
+                    <ul className="space-y-4 blog">
+                        {categorizedPosts.blog.map((recommended) => (
+                            <li key={recommended.slug} className="border-b pb-4">
+                                <img src={recommended.image} alt="" />
+                                <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
+                                    {recommended.title}
+                                </Link>
+                                <p className="text-sm text-gray-600 mt-2">{recommended.excerpt}</p>
+                            </li>
+                        ))}
+                    </ul>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Recommended recipes</h3>
+                    <ul className="space-y-4 blog">
+                        {categorizedPosts.recipe.map((recommended) => (
+                            <li key={recommended.slug} className="border-b pb-4">
+                                <img src={recommended.image} alt="" />
+                                <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
+                                    {recommended.title}
+                                </Link>
+                                <div className="flex items-center">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    {recommended.time}
+                                </div>
+                                <div className="flex items-center">
+                                    <Coffee className="w-4 h-4 mr-1" />
+                                    {recommended.difficulty}
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Recommended brewing methods</h3>
+                    <ul className="space-y-4 blog">
+                        {categorizedPosts.brewingMethod.map((recommended) => (
+                            <li key={recommended.slug} className="border-b pb-4">
+                                <img src={recommended.image} alt="" />
+                                <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
+                                    {recommended.title}
+                                </Link>
+                                <p className="text-sm text-gray-600 mt-2">{recommended.description}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+
+        </>
+
+    );
+};
+
+export default BlogDetail;

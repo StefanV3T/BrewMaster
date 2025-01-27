@@ -1,5 +1,4 @@
-import React from 'react';
-import { Coffee, Mail, Instagram, Twitter } from 'lucide-react';
+import { Coffee } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -15,42 +14,26 @@ const Footer = () => {
               Empowering coffee enthusiasts to brew the perfect cup at home through
               expert guidance, quality equipment, and a passion for coffee.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-white">
-                <Instagram className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                <Twitter className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                <Mail className="h-6 w-6" />
-              </a>
-            </div>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick links</h3>
             <ul className="space-y-2">
-              <li><a href="#methods" className="text-gray-300 hover:text-white">Brewing Methods</a></li>
+              <li><a href="#methods" className="text-gray-300 hover:text-white">Brewing methods</a></li>
               <li><a href="#equipment" className="text-gray-300 hover:text-white">Equipment</a></li>
               <li><a href="#recipes" className="text-gray-300 hover:text-white">Recipes</a></li>
               <li><a href="#blog" className="text-gray-300 hover:text-white">Blog</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contact</h3>
-            <ul className="space-y-2 text-gray-300">
-              <li>support@brewmaster.com</li>
-              <li>1-800-COFFEE</li>
-              <li>123 Brew Street</li>
-              <li>Coffee Town, CT 06510</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
           <p>&copy; {new Date().getFullYear()} Brew Master. All rights reserved.</p>
+          <p>Realized by <a href="https://www.grufix.nl/" target='_blank'>Grufix</a></p> 
         </div>
       </div>
     </footer>

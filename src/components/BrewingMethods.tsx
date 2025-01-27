@@ -1,28 +1,47 @@
-import React from 'react';
 import { Clock } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-const methods = [
-  {
-    title: 'Pour over',
-    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    description: 'A manual brewing method that involves pouring hot water over ground coffee in a filter.',
-    duration: '3-4 minutes',
-  },
-  {
-    title: 'French press',
-    image: 'https://images.unsplash.com/photo-1519082274554-1ca37fb8abb7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    description: 'A classic immersion brewing method using a plunger to separate grounds from coffee.',
-    duration: '4-5 minutes',
-  },
-  {
-    title: 'Espresso',
-    image: 'https://images.unsplash.com/photo-1595928642581-f50f4f3453a5?q=80&w=2055&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    description: 'High-pressure brewing method producing concentrated coffee shots.',
-    duration: '25-30 seconds',
-  },
-];
+type BlogPostMeta = {
+  title: string;
+  image: string;
+  description: string;
+  duration: string;
+  category: string;
+  slug: string;
+};
 
 const BrewingMethods = () => {
+  const [posts, setPosts] = useState<BlogPostMeta[]>([]);
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const markdownFiles = import.meta.glob('../blogs/*.md'); // Glob pattern for markdown files in _posts directory
+      console.log(markdownFiles); // Log detected markdown files
+
+      const posts = await Promise.all(
+        Object.entries(markdownFiles).map(async ([path, resolver]) => {
+          // Dynamically import the markdown file's attributes
+          const { attributes } = (await resolver()) as { attributes: BlogPostMeta };
+          console.log('Attributes:', attributes); // Log the attributes (front matter)
+
+          // Create the metadata object
+          return {
+            ...attributes,
+            slug: path.split('/').pop()?.replace('.md', '') || '',
+          } as BlogPostMeta;
+        })
+      );
+
+      // Filter the posts to include only those with category "blog"
+      const filteredPosts = posts.filter(post => post.category === 'brewing method');
+
+      console.log('Filtered Posts:', filteredPosts); // Log the filtered posts array
+      setPosts(filteredPosts); // Update state with the filtered posts array
+    };
+
+    loadPosts();
+  }, []);
+
   return (
     <section id="methods" className="section-padding bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,10 +55,12 @@ const BrewingMethods = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {methods.map((method) => (
+          {posts.map((method) => (
             <div key={method.title} className="card group">
+              <a key={method.slug} href={`/blog/${method.slug}`}>
               <div className="aspect-w-16 aspect-h-9 mb-4 overflow-hidden rounded-lg">
                 <img
+                    style={{ width: '100%', height: '200px' }}
                   src={method.image}
                   alt={method.title}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
@@ -51,6 +72,7 @@ const BrewingMethods = () => {
                 <Clock className="w-4 h-4 mr-2" />
                 <span>{method.duration}</span>
               </div>
+              </a>
             </div>
           ))}
         </div>

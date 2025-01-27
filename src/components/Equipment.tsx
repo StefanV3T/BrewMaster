@@ -1,4 +1,3 @@
-import React from 'react';
 import { Star, ShoppingBag } from 'lucide-react';
 
 const equipment = [
@@ -47,6 +46,7 @@ const Equipment = () => {
             <div key={item.name} className="card">
               <div className="aspect-w-16 aspect-h-9 mb-4 overflow-hidden rounded-lg">
                 <img
+                  style={{ width: '100%', height: '200px' }}
                   src={item.image}
                   alt={item.name}
                   className="object-cover w-full h-full"

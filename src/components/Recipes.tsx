@@ -1,31 +1,48 @@
-import React from 'react';
-import { Clock, Coffee, Droplet } from 'lucide-react';
+import { Clock, Coffee } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-const recipes = [
-  {
-    title: 'Classic Cappuccino',
-    image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    time: '5 mins',
-    difficulty: 'Medium',
-    ingredients: ['Espresso shot', 'Steamed milk', 'Milk foam'],
-  },
-  {
-    title: 'Cold Brew',
-    image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    time: '12 hours',
-    difficulty: 'Easy',
-    ingredients: ['Coarse ground coffee', 'Cold water'],
-  },
-  {
-    title: 'Pour Over',
-    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-    time: '4 mins',
-    difficulty: 'Medium',
-    ingredients: ['Medium ground coffee', 'Hot water', 'Filter'],
-  },
-];
+type BlogPostMeta = {
+  title: string;
+  image: string;
+  time: string;
+  difficulty: string;
+  ingredients: string[];
+  category: string;
+  slug: string;
+};
 
 const Recipes = () => {
+  const [posts, setPosts] = useState<BlogPostMeta[]>([]);
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const markdownFiles = import.meta.glob('../blogs/*.md'); // Glob pattern for markdown files in _posts directory
+      console.log(markdownFiles); // Log detected markdown files
+
+      const posts = await Promise.all(
+        Object.entries(markdownFiles).map(async ([path, resolver]) => {
+          // Dynamically import the markdown file's attributes
+          const { attributes } = (await resolver()) as { attributes: BlogPostMeta };
+          console.log('Attributes:', attributes); // Log the attributes (front matter)
+
+          // Create the metadata object
+          return {
+            ...attributes,
+            slug: path.split('/').pop()?.replace('.md', '') || '',
+          } as BlogPostMeta;
+        })
+      );
+
+      // Filter the posts to include only those with category "blog"
+      const filteredPosts = posts.filter(post => post.category === 'recipe');
+
+      console.log('Filtered Posts:', filteredPosts); // Log the filtered posts array
+      setPosts(filteredPosts); // Update state with the filtered posts array
+    };
+
+    loadPosts();
+  }, []);
+
   return (
     <section id="recipes" className="section-padding bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,10 +57,12 @@ const Recipes = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recipes.map((recipe) => (
+          {posts.map((recipe) => (
             <div key={recipe.title} className="card group">
+              <a key={recipe.slug} href={`/blog/${recipe.slug}`}>
               <div className="aspect-w-16 aspect-h-9 mb-4 overflow-hidden rounded-lg">
                 <img
+                    style={{ width: '100%', height: '200px' }}
                   src={recipe.image}
                   alt={recipe.title}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
@@ -68,6 +87,7 @@ const Recipes = () => {
                   ))}
                 </ul>
               </div>
+              </a>
             </div>
           ))}
         </div>

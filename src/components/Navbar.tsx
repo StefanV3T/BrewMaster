@@ -9,8 +9,14 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
+            <NavLink href="/">
+              <div className='flex items-center'>
             <Coffee className="h-8 w-8 text-coffee" />
             <span className="ml-2 text-xl font-serif font-bold">Brew Master</span>
+              </div>
+
+            </NavLink>
+
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
