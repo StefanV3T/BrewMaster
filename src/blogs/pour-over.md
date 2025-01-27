@@ -1,12 +1,12 @@
 ---
-title: 'Pour Over'
+title: 'Pour over'
 image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
 time: '4 mins'
 difficulty: 'Medium'
 ingredients: ['Medium ground coffee', 'Hot water', 'Filter']
 category: 'recipe'
 ---
-# Pour Over
+# Pour over
 
 ![Pour Over](https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80)
 

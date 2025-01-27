@@ -1,5 +1,5 @@
 ---
-title: 'Classic Cappuccino'
+title: 'Classic cappuccino'
 image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
 time: '5 mins'
 difficulty: 'Medium'
@@ -9,7 +9,7 @@ ingredients:
   - 'Milk foam'
 category: 'recipe'
 ---
-# Classic Cappuccino
+# Classic cappuccino
 
 ![Classic Cappuccino](https://images.unsplash.com/photo-1534778101976-62847782c213?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80)
 

@@ -9,44 +9,38 @@
     margin-bottom: 1.5rem;
     font-weight: 600;
     line-height: 1.4;
-    font-family: Arial;
+    color: #111827;
 }
 
 .markdownContent h1 {
     font-size: 2.5rem;
-    color: #333;
 }
 
 .markdownContent h2 {
     font-size: 2rem;
-    color: #444;
 }
 
 .markdownContent h3 {
     font-size: 1.75rem;
-    color: #555;
 }
 
 .markdownContent h4 {
     font-size: 1.5rem;
-    color: #666;
 }
 
 .markdownContent h5 {
     font-size: 1.25rem;
-    color: #777;
 }
 
 .markdownContent h6 {
     font-size: 1rem;
-    color: #888;
 }
 
 .markdownContent p {
     margin-bottom: 1.5rem;
     font-size: 16px;
     line-height: 1.6;
-    color: #555;
+    color: #4b5563;
 }
 
 .markdownContent img {
@@ -58,6 +52,10 @@
     transition: transform 0.3s ease;
 }
 
+.markdownContent ol li,
+.markdownContent ul li {
+    color: #4b5563;
+}
 .markdownContent img:hover {
     transform: scale(1.05);
 }

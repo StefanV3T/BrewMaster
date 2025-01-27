@@ -1,12 +1,12 @@
 ---
-title: 'Cold Brew'
+title: 'Cold brew'
 image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
 time: '12 hours'
 difficulty: 'Easy'
 ingredients: ['Coarse ground coffee', 'Cold water']
 category: 'recipe'
 ---
-# Cold Brew
+# Cold brew
 
 ![Cold Brew](https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80)
 

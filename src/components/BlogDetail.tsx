@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import './BlogDetail.css';
 import { Clock, Coffee } from 'lucide-react';
+import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from 'react-share';
 
 type BlogPostMeta = {
     title: string;
@@ -30,6 +31,7 @@ type BlogPost = BlogPostMeta & {
 };
 
 const BlogDetail: React.FC = () => {
+    const url = window.location.href;
     const location = useLocation();
     const { slug } = useParams<{ slug: string }>();
     const [post, setPost] = useState<BlogPost | null>(null);
@@ -105,9 +107,21 @@ const BlogDetail: React.FC = () => {
                                 <span className="mx-2">/</span>
                                 <a href="#" className="text-coffee hover:text-coffee-dark">{post.title}</a>
                             </p>
+                                {post.category === 'recipe' ? (
+                                    <span className='bg-coffee text-white px-4 py-2 rounded-md mr-2 my-4'>{post.category}</span>
+                                ) : post.category === 'brewing method' ? (
+                                    <span className='bg-coffee-light text-white px-4 py-2 rounded-md mr-2 my-4'>{post.category}</span>
+                                ) : (
+                                    <span className='bg-coffee-dark text-white px-4 py-2 rounded-md mr-2 my-4'>{post.category}</span>
 
-                            <h1 className="text-3xl font-bold text-gray-900 mb-4">{post.title}</h1>
-                            <p className="text-lg text-gray-600 mb-4">{post.author}</p>
+                                )}
+
+
+                                <div className="text-base text-gray-800">
+                                    <div dangerouslySetInnerHTML={{ __html: post.content }} className="markdownContent" />
+                                </div>
+
+                                <p className="text-lg text-gray-600 mb-2 mt-4">{post.author}</p>
                             {post.date ? (
                                 <p className="text-sm text-gray-500 mb-8">{formatDate(post.date)}</p>
                             ) : (
@@ -115,14 +129,18 @@ const BlogDetail: React.FC = () => {
                             )
                             }
 
-                            <div className="text-base text-gray-800 mb-16">
-                                <div dangerouslySetInnerHTML={{ __html: post.content }} className="markdownContent" />
-                            </div>
-
                             <a href="#blog-content">
                                 <button className="btn btn-primary mr-5">Back to top</button>
                             </a>
-                            <button className="btn">Back to home</button>
+                                <a href="/">
+                                    <button className="btn text-gray-600">Back to home</button>
+                                </a>
+                                <div className="share-buttons w-full flex mt-8">
+                                    <button className='btn bg-coffee-light text-gray-50 px-4 py-2 rounded-md mr-2'><FacebookShareButton url={url}>Share on Facebook</FacebookShareButton></button>
+                                    <button className='btn bg-coffee-light text-gray-50 px-4 py-2 rounded-md mx-2'><TwitterShareButton url={url} title="Check out this amazing coffee brewing guide!">Share on Twitter</TwitterShareButton></button>
+                                    <button className='btn bg-coffee-light text-gray-50 px-4 py-2 rounded-md mx-2'><LinkedinShareButton url={url}>Share on LinkedIn</LinkedinShareButton></button>
+
+                                </div>
 
                         </div>
                     )}
