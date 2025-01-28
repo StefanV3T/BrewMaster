@@ -92,7 +92,8 @@ const BlogDetail: React.FC = () => {
     return (
         <>
 
-            <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-8 bg-white">
+            <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-40 bg-white">
+
 
                 {/* Blog Content */}
                 <div className="w-2/3" id="blog-content">
@@ -145,8 +146,10 @@ const BlogDetail: React.FC = () => {
                         </div>
                     )}
 
+
                     {/* Recommended Posts in horizontal layout */}
-                    <div className="flex space-x-8 mt-16">
+                    <h3 className="text-xl font-semibold text-gray-900 mt-16">Recommended blogs</h3>
+                    <div className="flex space-x-8 mt-2">
                         {categorizedPosts.blog.map((recommended) => (
                             <div key={recommended.slug} className="w-1/3">
                                 <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
@@ -159,7 +162,8 @@ const BlogDetail: React.FC = () => {
                     </div>
 
                     {/* Recipe Posts */}
-                    <div className="flex space-x-8 mt-16">
+                    <h3 className="text-xl font-semibold text-gray-900 mt-16">Recommended recipes</h3>
+                    <div className="flex space-x-8 mt-2">
                         {categorizedPosts.recipe.map((recommended) => (
                             <div key={recommended.slug} className="w-1/3 border p-4 rounded-lg shadow-lg">
                                 <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
@@ -186,7 +190,8 @@ const BlogDetail: React.FC = () => {
                     </div>
 
                     {/* Brewing Method Posts */}
-                    <div className="flex space-x-8 mt-16">
+                    <h3 className="text-xl font-semibold text-gray-900 mt-16">Recommended brewing methods</h3>
+                    <div className="flex space-x-8 mt-2">
                         {categorizedPosts.brewingMethod.map((recommended) => (
                             <div key={recommended.slug} className="w-1/3 border p-4 rounded-lg shadow-lg">
                                 <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
@@ -209,7 +214,7 @@ const BlogDetail: React.FC = () => {
 
                 {/* Sidebar */}
                 <div className="w-1/3 bg-gray-50 p-6 rounded-lg shadow-lg border-l-2 sidebar">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Recommended blogs</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Blogs</h3>
                     <ul className="space-y-4 blog">
                         {categorizedPosts.blog.map((recommended) => (
                             <li key={recommended.slug} className="border-b pb-4">
@@ -221,7 +226,7 @@ const BlogDetail: React.FC = () => {
                             </li>
                         ))}
                     </ul>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Recommended recipes</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Recipes</h3>
                     <ul className="space-y-4 blog">
                         {categorizedPosts.recipe.map((recommended) => (
                             <li key={recommended.slug} className="border-b pb-4">
@@ -240,7 +245,7 @@ const BlogDetail: React.FC = () => {
                             </li>
                         ))}
                     </ul>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Recommended brewing methods</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Brewing methods</h3>
                     <ul className="space-y-4 blog">
                         {categorizedPosts.brewingMethod.map((recommended) => (
                             <li key={recommended.slug} className="border-b pb-4">
