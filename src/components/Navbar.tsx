@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Coffee, Menu, X } from 'lucide-react';
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,10 +21,10 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink href="#methods">Brewing methods</NavLink>
-            <NavLink href="#equipment">Equipment</NavLink>
-            <NavLink href="#recipes">Recipes</NavLink>
-            <NavLink href="#blog">Blog</NavLink>
+            <NavLink href="/#methods">Brewing methods</NavLink>
+            <NavLink href="/#equipment">Equipment</NavLink>
+            <NavLink href="/#recipes">Recipes</NavLink>
+            <NavLink href="/#blog">Blog</NavLink>
           </div>
 
           <button
@@ -50,14 +51,25 @@ const Navbar = () => {
   );
 };
 
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a
-    href={href}
-    className="text-gray-700 hover:text-coffee transition-colors duration-300"
-  >
-    {children}
-  </a>
-);
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+  const location = useLocation();
+
+  const isOnHomePage = location.pathname === "/";
+
+  if (isOnHomePage) {
+    return (
+      <a href={href}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <a href={href} onClick={() => (window.location.href = `/${href}`)}>
+      {children}
+    </a>
+  );
+};
 
 const MobileNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a

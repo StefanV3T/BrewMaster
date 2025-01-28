@@ -102,11 +102,11 @@ const BlogDetail: React.FC = () => {
     return (
         <>
 
-            <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-40 bg-white">
+            <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 max-lg:flex-col flex lg:space-x-40 bg-white">
 
 
                 {/* Blog Content */}
-                <div className="w-2/3" id="blog-content">
+                <div className="lg:w-2/3 w-full" id="blog-content">
                     {loading ? (
                         <div className="flex justify-center items-center w-full pt-32">
                             <div className="spinner"></div>
@@ -159,23 +159,29 @@ const BlogDetail: React.FC = () => {
 
                     {/* Recommended Posts in horizontal layout */}
                     <h3 className="text-xl font-semibold text-gray-900 mt-16">Recommended blogs</h3>
-                    <div className="flex space-x-8 mt-2">
+                    <div className="flex lg:space-x-8 space-x-2 mt-2">
                         {categorizedPosts.blog.map((recommended) => (
-                            <div key={recommended.slug} className="w-1/3">
+
+                            <div key={recommended.slug} className="w-1/3 lg:p4">
+                                <a href={`/blog/${recommended.slug}`}>
                                 <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
                                 <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
                                     {recommended.title}
                                 </Link>
                                 <p className="text-sm text-gray-600 mt-2">{recommended.excerpt}</p>
+                                </a>
                             </div>
+
                         ))}
                     </div>
 
                     {/* Recipe Posts */}
                     <h3 className="text-xl font-semibold text-gray-900 mt-16">Recommended recipes</h3>
-                    <div className="flex space-x-8 mt-2">
+                    <div className="flex lg:space-x-8 space-x-2 mt-2">
                         {categorizedPosts.recipe.map((recommended) => (
-                            <div key={recommended.slug} className="w-1/3 border p-4 rounded-lg shadow-lg">
+                            <div key={recommended.slug} className="w-1/3 border lg:p-4 rounded-lg shadow-lg">
+                                <a href={`/blog/${recommended.slug}`}>
+
                                 <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
                                 <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
                                     {recommended.title}
@@ -195,15 +201,18 @@ const BlogDetail: React.FC = () => {
                                         {recommended.difficulty && <li><strong>Difficulty:</strong> {recommended.difficulty}</li>}
                                     </ul>
                                 </div>
+                                </a>
                             </div>
                         ))}
                     </div>
 
                     {/* Brewing Method Posts */}
                     <h3 className="text-xl font-semibold text-gray-900 mt-16">Recommended brewing methods</h3>
-                    <div className="flex space-x-8 mt-2">
+                    <div className="flex lg:space-x-8 space-x-2 mt-2">
                         {categorizedPosts.brewingMethod.map((recommended) => (
-                            <div key={recommended.slug} className="w-1/3 border p-4 rounded-lg shadow-lg">
+                            <div key={recommended.slug} className="w-1/3 border lg:p-4 rounded-lg shadow-lg">
+                                <a href={`/blog/${recommended.slug}`}>
+
                                 <img src={recommended.image} alt="" className="w-full h-48 object-cover rounded-lg mb-4" />
                                 <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
                                     {recommended.title}
@@ -217,22 +226,25 @@ const BlogDetail: React.FC = () => {
                                         <p className="mt-2"><strong>Duration:</strong> {recommended.duration}</p>
                                     )}
                                 </div>
+                                </a>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* Sidebar */}
-                <div className="w-1/3 bg-gray-50 p-6 rounded-lg shadow-lg border-l-2 sidebar">
+                <div className="lg:w-1/3 w-full bg-gray-50 p-6 rounded-lg shadow-lg border-l-2 sidebar">
                     <h3 className="text-xl font-semibold text-gray-900 mb-4">Blogs</h3>
                     <ul className="space-y-4 blog">
                         {categorizedPosts.blog.map((recommended) => (
                             <li key={recommended.slug} className="border-b pb-4">
+                                <a href={`/blog/${recommended.slug}`}>
                                 <img src={recommended.image} alt="" />
                                 <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
                                     {recommended.title}
                                 </Link>
                                 <p className="text-sm text-gray-600 mt-2">{recommended.excerpt}</p>
+                                </a>
                             </li>
                         ))}
                     </ul>
@@ -240,6 +252,7 @@ const BlogDetail: React.FC = () => {
                     <ul className="space-y-4 blog">
                         {categorizedPosts.recipe.map((recommended) => (
                             <li key={recommended.slug} className="border-b pb-4">
+                                <a href={`/blog/${recommended.slug}`}>
                                 <img src={recommended.image} alt="" />
                                 <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
                                     {recommended.title}
@@ -252,6 +265,7 @@ const BlogDetail: React.FC = () => {
                                     <Coffee className="w-4 h-4 mr-1" />
                                     {recommended.difficulty}
                                 </div>
+                                </a>
                             </li>
                         ))}
                     </ul>
@@ -259,11 +273,13 @@ const BlogDetail: React.FC = () => {
                     <ul className="space-y-4 blog">
                         {categorizedPosts.brewingMethod.map((recommended) => (
                             <li key={recommended.slug} className="border-b pb-4">
+                                <a href={`/blog/${recommended.slug}`}>
                                 <img src={recommended.image} alt="" />
                                 <Link to={`/blog/${recommended.slug}`} className="text-lg font-medium text-coffee hover:text-coffee-dark">
                                     {recommended.title}
                                 </Link>
                                 <p className="text-sm text-gray-600 mt-2">{recommended.description}</p>
+                                </a>
                             </li>
                         ))}
                     </ul>
