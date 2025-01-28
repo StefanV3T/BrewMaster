@@ -15,7 +15,7 @@ const BrewingMethods = () => {
 
   useEffect(() => {
     const loadPosts = async () => {
-      const markdownFiles = import.meta.glob('../../public/blogs/*.md'); // Glob pattern for markdown files in _posts directory
+      const markdownFiles = import.meta.glob('../blogs/*.md'); // Glob pattern for markdown files in _posts directory
       console.log(markdownFiles); // Log detected markdown files
 
       const posts = await Promise.all(
