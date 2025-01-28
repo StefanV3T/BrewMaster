@@ -44,12 +44,12 @@ const BlogDetail: React.FC = () => {
             setLoading(true);
             setTimeout(async () => {
                 try {
-                    const { attributes, html } = await import(`../blogs/${slug}.md`) as { attributes: BlogPost, html: string };
+                    const { attributes, html } = await import(`../../blogs/${slug}.md`) as { attributes: BlogPost, html: string };
 
                     const postData = { ...attributes, content: html };
                     setPost(postData);
 
-                    const markdownFiles = import.meta.glob('../blogs/*.md');
+                    const markdownFiles = import.meta.glob('../../blogs/*.md');
                     const posts = await Promise.all(
                         Object.entries(markdownFiles).map(async ([path, resolver]) => {
                             const { attributes } = (await resolver()) as { attributes: BlogPost };
